@@ -1,9 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "cell.c"
-#include "print.c"
-
+#include "cell.h"
+#include "print.h"
 
 int main() {
     int width = 10;

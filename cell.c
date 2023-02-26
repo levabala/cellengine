@@ -1,6 +1,10 @@
+#include <stddef.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "cell.h"
 
-const size_t CELL_SIZE = sizeof(Cell);
+static const size_t CELL_SIZE = sizeof(Cell);
 
 CellMap* initCellMap(int width, int height) {
     Cell* cells = calloc(width * height, CELL_SIZE);
@@ -13,16 +17,16 @@ CellMap* initCellMap(int width, int height) {
     return cellMap;
 }
 
-size_t getCellMapIndex(int x, int y, int width) {
-    return y * width + x;
+static size_t getCellMapIndex(CellMap* cellMap, int x, int y) {
+    return y * cellMap->width + x;
 }
 
-Cell getCellFromMapValue(CellMap* cellMap, int x, int y) {
-    return cellMap->cells[getCellMapIndex(x, y, cellMap->width)];
+static Cell getCellFromMapValue(CellMap* cellMap, int x, int y) {
+    return cellMap->cells[getCellMapIndex(cellMap, x, y)];
 }
 
-Cell* getCellFromMapPointer(CellMap* cellMap, int x, int y) {
-    return cellMap->cells + getCellMapIndex(x, y, cellMap->width);
+static Cell* getCellFromMapPointer(CellMap* cellMap, int x, int y) {
+    return cellMap->cells + getCellMapIndex(cellMap, x, y);
 }
 
 void iterateCellMap(CellMap* cellMap, void (*iterator)(CellMap* cellMap, Cell* cell, int x, int y)) {
@@ -36,11 +40,6 @@ void iterateCellMap(CellMap* cellMap, void (*iterator)(CellMap* cellMap, Cell* c
     }
 }
 
-/* void elapseTime(CellMap* cellMap) { */
-/*     int y, x; */
-/*     for (y = 0; y < cellMap->height; y++) { */
-/*         for (x = 0; x < cellMap->width; x++) { */
-/*             Cell* cell = getCellFromMapPointer(cellMap, x, y); */
-/*         } */
-/*     } */
-/* } */
+static void setCell(CellMap* cellMap, int x, int y, Cell* cell) {
+   memcpy(cellMap + getCellMapIndex(cellMap, x, y) * CELL_SIZE, cell, CELL_SIZE);
+}
