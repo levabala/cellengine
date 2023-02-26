@@ -3,7 +3,7 @@
 #include "print.h"
 #include "cell.h"
 
-static void printCell(CellMap* cellMap, Cell* cell, int x, int y) {
+static void printCell(CellMap* cellMap, Cell* cell, int x, int y, void* context) {
     printf("%d", cell->mass);
 
     if (x != cellMap->width - 1) {
@@ -14,5 +14,5 @@ static void printCell(CellMap* cellMap, Cell* cell, int x, int y) {
 }
 
 void printCellMap(CellMap* cellMap) {
-    iterateCellMap(cellMap, printCell);
+    iterateCellMap(cellMap, printCell, NULL);
 }
