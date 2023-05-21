@@ -5,15 +5,15 @@
 
 static void
 printCell(CellMap* cellMap, Cell* cell, int x, int y, void* context) {
-  printf("%d", cell->mass);
+    printf("%d", cell->mass);
 
-  if (x != cellMap->width - 1) {
-    printf(" ");
-  } else {
-    printf("\n");
-  }
+    if (x != cellMap->width - 1) {
+        printf(" ");
+    } else {
+        printf("\n");
+    }
 }
 
 void printCellMap(CellMap* cellMap) {
-  iterateCellMap(cellMap, printCell);
+    iterateCellMap(cellMap, printCell);
 }

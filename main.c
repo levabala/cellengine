@@ -1,37 +1,60 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "cell.h"
 #include "print.h"
 
 void printBlank() {
-  printf("\n");
+    printf("\n");
 }
 
-int main() {
-  int width = 5;
-  int height = 5;
+int mssleep(long miliseconds) {
+    struct timespec req = {
+        (int)(miliseconds / 1000), (miliseconds % 1000) * 1000000};
 
-  CellMap* cellMap = initCellMap(width, height);
+    return nanosleep(&req, NULL);
+}
 
-  printCellMap(cellMap);
+void clearScreen() {
+    printf("\e[1;1H\e[2J");
+}
 
-  setCell(cellMap, 1, 2, &(Cell){.mass = 3, .vx = 6});
-  setCell(cellMap, 2, 2, &(Cell){.mass = 7});
-  setCell(cellMap, 3, 2, &(Cell){.mass = 2});
-  setCell(cellMap, 4, 3, &(Cell){.mass = 4});
+void printOnElapseTimeIteration(
+    CellMap* cellMap, int timeTick, int velocityTick
+) {
+    clearScreen();
 
-  int i = 5;
-  while (1 && i--) {
     /* getchar(); */
-
-    elapseTime(cellMap, 1);
+    mssleep(200);
 
     printBlank();
     printCellMap(cellMap);
 
     printf("total mass: %d\n", getTotalMass(cellMap));
-  }
+    printf("timeTick/velocityTick: %d/%d", timeTick, velocityTick);
+}
 
-  return 0;
+int main() {
+    int width = 20;
+    int height = 5;
+
+    CellMap* cellMap = initCellMap(width, height);
+
+    printCellMap(cellMap);
+
+    setCell(cellMap, 1, 2, &(Cell){.mass = 1});
+    setCell(cellMap, 2, 2, &(Cell){.mass = 2, .vx = 1});
+    setCell(cellMap, 3, 2, &(Cell){.mass = 1});
+    setCell(cellMap, 4, 3, &(Cell){.mass = 1});
+
+    printBlank();
+    printCellMap(cellMap);
+
+    int i = 50;
+    while (1 && i--) {
+        elapseTime(cellMap, 1, printOnElapseTimeIteration);
+    }
+
+    return 0;
 }
